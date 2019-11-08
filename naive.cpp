@@ -63,7 +63,7 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 		std::vector<Result> v;
 		resultset.push_back(v);
 		
-		file.open(tables[x].c_str());
+		file.open(table.c_str());
 
 		//Read each line in the table
 		while(file >> current_line){
