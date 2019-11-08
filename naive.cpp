@@ -50,8 +50,8 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 	//For each resultset[x] representing the query x, every element resultset[x][1], [2] and so on will house
 	//a grouping that occurs in the table specified and the amount of times it occurs.
 	std::vector<std::vector<Result>> resultset;
-	ifstream file;
-	string current_line;
+	std::ifstream file;
+	std::string current_line;
 	std::vector<std::string> out;
 	std::vector<std::string> out_trimmed;
 	int counted = 0;
@@ -63,7 +63,7 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 		std::vector<Result> v;
 		resultset.push_back(v);
 		
-		file.open(tables[x].c_str());
+		file.open(table.c_str());
 
 		//Read each line in the table
 		while(file >> current_line){
