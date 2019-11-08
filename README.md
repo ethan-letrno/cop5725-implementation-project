@@ -12,3 +12,25 @@ For each .table file, the naming convention is (name of table)(number of rows).t
 3. algorithms from paper that create an optimal tree
     - algorithm 1
     - algorithm 6
+    
+
+# Tentative Plan
+
+1. by thursday november 14
+    - algorithm 1, 6, naive solution complete
+    - status report
+    - presentation slides
+    
+2. by thursday november 21
+    - optimal solution done
+    - algorithm 2, 3 done
+    - algorithm essentially complete
+    
+3. by tuesday november 26
+    - testing and performance eval
+    - write final report
+    
+4. by tuesday, dec 3
+    - final report due / presentation
+
+    
