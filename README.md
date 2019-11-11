@@ -4,6 +4,13 @@ Implementation in C++ of the algorithms described in the 2016 ICDE paper "A Nove
 
 For each .table file, the naming convention is (name of table)(number of rows).table, wherein "k" is shorthand for thousand and "m" for million.
 
+Naive solution with the following Group By's:
+
+{"ORDERKEY"},
+{"PARTKEY"},
+{"ORDERKEY", "PARTKEY"}
+
+Ran for 2219.46 seconds, or ~37 minutes. Long time could be because the 3rd group is the primary key for the table and/or we use vectors to store, and it takes O(n) time to search them.
 
 # To Do
 
