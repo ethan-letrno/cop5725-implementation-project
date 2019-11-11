@@ -24,7 +24,7 @@ Long time in the first could be because the 3rd group is the primary key for the
 
 
 TREE STRUCTURE:
-----------------------------------------------
+
 // Represents a node of a tree 
 struct Node 
 { 
@@ -39,10 +39,10 @@ Node * newNode(std::vector<std::string>> group)
     temp->group = group; 
     return temp; 
 } 
-----------------------------------------------
+
 
 CARDINALITY ESTIMATOR
-----------------------------------------------
+
 double estimateCardinality(std::vector<int> indices, std::string filename){
 
     std::ifstream file;
@@ -91,7 +91,7 @@ double estimateCardinality(std::vector<int> indices, std::string filename){
 	//This will return a number from 0 - 1, a 1 indicating that every single line was unique. So, the higher this number, the higher the cardinality estimated.
 	return (dv.size()/500.0);
 	}
-----------------------------------------------
+
 
 
 
