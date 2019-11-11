@@ -10,7 +10,16 @@ Naive solution with the following Group By's:
 {"PARTKEY"},
 {"ORDERKEY", "PARTKEY"}
 
-Ran for 2219.46 seconds, or ~37 minutes. Long time could be because the 3rd group is the primary key for the table and/or we use vectors to store, and it takes O(n) time to search them.
+Ran for 2219.46 seconds, or ~37 minutes. Naive solution with the following Group By's:
+
+{"ORDERKEY"},
+{"SHIPINSTRUCT"},
+{"ORDERKEY", "SHIPINSTRUCT"}
+
+Ran for 740.65 seconds, or ~12.5 minutes. 
+
+
+Long time in the first could be because the 3rd group is the primary key for the table and/or we use vectors to store, and it takes O(n) time to search them.
 
 # To Do
 
