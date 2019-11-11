@@ -29,13 +29,13 @@ TREE STRUCTURE:
 struct Node 
 { 
     std::vector<std::int>> group; 
-   	std::vector<Node *>child; 
+   	std::vector<Node * >child; 
 }; 
    
  // Utility function to create a new tree node 
-Node *newNode(std::vector<std::string>> group) 
+Node * newNode(std::vector<std::string>> group) 
 { 
-    Node *temp = new Node; 
+    Node * temp = new Node; 
     temp->group = group; 
     return temp; 
 } 
@@ -90,8 +90,7 @@ double estimateCardinality(std::vector<int> indices, std::string filename){
 
 	//This will return a number from 0 - 1, a 1 indicating that every single line was unique. So, the higher this number, the higher the cardinality estimated.
 	return (dv.size()/500.0);
-
-}
+	}
 ----------------------------------------------
 
 
