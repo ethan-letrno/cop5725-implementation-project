@@ -1,4 +1,3 @@
-
 #include <fstream>
 #include <iostream>
 #include <chrono>
@@ -23,7 +22,7 @@ int main(){
 		{"ORDERKEY"},
 		{"PARTKEY"},
 		{"ORDERKEY", "PARTKEY"},
-	}
+	};
 
 	auto start = std::chrono::system_clock::now();
     NaiveExecution(elements, table);
@@ -51,10 +50,13 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 	//a grouping that occurs in the table specified and the amount of times it occurs.
 	std::vector<std::vector<Result>> resultset;
 	std::ifstream file;
+	std::ofstream outfile;
 	std::string current_line;
 	std::vector<std::string> out;
 	std::vector<std::string> out_trimmed;
 	int counted = 0;
+
+	int test_counter = 0;
 
 	//For each query...
 	for(int x = 0; x < elements.size(); x++){
@@ -66,7 +68,11 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 		file.open(table.c_str());
 
 		//Read each line in the table
-		while(file >> current_line){
+		while(std::getline(file,current_line)){
+			test_counter++;
+
+			if(test_counter%1000 == 0)
+				std::cout<<"Still working.... ("<<test_counter<<")\n";
 
 			//Split the current line on '|'
 			tokenize(current_line, out);
@@ -85,7 +91,7 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 			//If there are no results here...
 			if(resultset[x].empty()){
 				resultset[x].push_back(Result());
-				resultset[x][0].group.insert(resultset[x][0].group.end(), out_trimmed);
+				resultset[x][0].group.insert(resultset[x][0].group.end(), out_trimmed.begin(), out_trimmed.end());
 				resultset[x][0].count = 1;
 			}
 			else{
@@ -100,7 +106,8 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 				//If not already found, add to resultset[x]
 				if(counted == 0){
 					resultset[x].push_back(Result());
-					resultset[x].back().group.insert(resultset.back().group.end(), out_trimmed);
+					resultset[x].back().group = out_trimmed;
+					//resultset[x].back().group.insert(resultset.back().group.end(), out_trimmed.begin(), out_trimmed.end());
 					resultset[x].back().count = 1;
 				}
 
@@ -120,6 +127,31 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 	//Having all results for each query, write them to a text file in current directory.
 
 	/* OUTPUT CODE HERE */
+	outfile.open("naive_output.txt");
+
+	for(int x = 0; x < resultset.size(); x++){
+
+		outfile<<"For Grouping { ";
+
+		for(int a = 0; a < elements[x].size(); a++){
+			outfile<<elements[x][a]<<" ";
+		}
+
+		outfile<<"}: \n\n";
+
+		for(int y = 0; y < resultset[x].size(); y++){
+			for(int z = 0; z < resultset[x][y].group.size(); z++){
+				outfile<<resultset[x][y].group[z]<<", ";
+			}
+
+			outfile<<"Count = "<<resultset[x][y].count<<std::endl;
+		}
+
+		outfile<<"\n\n";
+	}
+
+	outfile.close();
+
 
 	
 
@@ -128,42 +160,60 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 }
 
 int getColumnForLineitemElement(std::string element){
-	switch(element){
-		case "ORDERKEY":
-			return 0;
-		case "PARTKEY":
-			return 1;
-		case "SUPPKEY":
-			return 2;
-		case "LINENUMBER":
-			return 3;
-		case "QUANTITY":
-			return 4;
-		case "EXTENDEDPRICE":
-			return 5;
-		case "DISCOUNT":
-			return 6;
-		case "TAX":
-			return 7;
-		case "RETURNFLAG":
-			return 8;
-		case "LINESTATUS":
-			return 9;
-		case "SHIPDATE":
-			return 10;
-		case "COMMITDATE":
-			return 11;
-		case "RECEIPTDATE":
-			return 12;
-		case "SHIPINSTRUCT":
-			return 13;
-		case "SHIPMODE":
-			return 14;
-		case "COMMENT":
-			return 15;
-	}
-}
 
+	if(element.compare("ORDERKEY") == 0){
+		return 0;
+	}
+	else if(element.compare("PARTKEY") == 0){
+		return 1;
+	}
+	else if(element.compare("SUPPKEY") == 0){
+		return 2;
+	}
+	else if(element.compare("LINENUMBER") == 0){
+		return 3;
+	}
+	else if(element.compare("QUANTITY") == 0){
+		return 4;
+	}
+	else if(element.compare("EXTENDEDPRICE") == 0){
+		return 5;
+	}
+	else if(element.compare("DISCOUNT") == 0){
+		return 6;
+	}
+	else if(element.compare("TAX") == 0){
+		return 7;
+	}
+	else if(element.compare("RETURNFLAG") == 0){
+		return 8;
+	}
+	else if(element.compare("LINESTATUS") == 0){
+		return 9;
+	}
+	else if(element.compare("SHIPDATE") == 0){
+		return 10;
+	}
+	else if(element.compare("COMMITDATE") == 0){
+		return 11;
+	}
+	else if(element.compare("RECEIPTDATE") == 0){
+		return 12;
+	}
+	else if(element.compare("SHIPINSTRUCT") == 0){
+		return 13;
+	}
+	else if(element.compare("SHIPMODE") == 0){
+		return 14;
+	}
+	else if(element.compare("COMMENT") == 0){
+		return 15;
+	}
+	else{
+		return -1;
+	}
+
+}
 
 //Modified from function from source: https://www.techiedelight.com/split-string-cpp-using-delimiter/
 void tokenize(std::string const &str, std::vector<std::string> &out){
@@ -171,7 +221,8 @@ void tokenize(std::string const &str, std::vector<std::string> &out){
 	size_t end = 0;
 
 	while ((start = str.find_first_not_of('|', end)) != std::string::npos){
-		end = str.find(delim, start);
+		end = str.find('|', start);
 		out.push_back(str.substr(start, end - start));
 	}
 }
+
