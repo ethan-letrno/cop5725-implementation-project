@@ -7,8 +7,7 @@ For each .table file, the naming convention is (name of table)(number of rows).t
 
 # To Do
 
-1. create working naive solution
-2. 'optimized' solution works similarly to naive but executes based on tree structure from (3)
+1. 'optimized' solution works similarly to naive but executes based on tree structure from (3)
 3. algorithms from paper that create an optimal tree
     - algorithm 1
     - algorithm 6
@@ -17,7 +16,7 @@ For each .table file, the naming convention is (name of table)(number of rows).t
 # Tentative Plan
 
 1. by thursday november 14
-    - algorithm 1, 6, naive solution complete
+    - algorithm 1, 6
     - status report
     - presentation slides
     
