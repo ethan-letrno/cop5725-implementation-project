@@ -15,12 +15,19 @@ bool sortbysecdesc(const std::pair<std::vector<int>,double> &a, const std::pair<
     return (a.second > b.second);
 }
 
+bool sortbygroup(const std::pair<std::vector<int>,double> &a, const std::pair<std::vector<int>,double> &b)
+{
+    return (a.first.size() > b.first.size());
+    
+}
+
 // Represents a node of a tree 
 struct Node 
 { 
     std::vector< int > group; 
    	std::vector<Node *>children; 
 };
+
 
 // Utility function to create a new tree node 
 Node *newNode(std::vector< int > group) 
@@ -36,7 +43,9 @@ double scanCost(std::vector<int> indices, std::string filename);
 void tokenize(std::string const &str, std::vector<std::string> &out);
 int getColumnForLineitemElement(std::string element);
 Node * build_preliminary_solution(std::vector< std::vector< std::string > >, std::string);
-   
+void preord(Node* root);
+Node * find_min_sort_cost(Node *, Node *, std::string);
+
 int main() {
     
     std::vector<std::vector<std::string>> elements = {
@@ -86,35 +95,111 @@ Node * build_preliminary_solution(std::vector< std::vector< std::string > > term
     //Sort cardinalities in descending order
     sort(cardinalities.begin(), cardinalities.end(), sortbysecdesc);
     
+    //Now sort by group
+    sort(cardinalities.begin(), cardinalities.end(), sortbygroup);
+    
     //Create root node
     std::vector< int > root_info;
+    root_info.push_back(-1);
     Node * root = newNode(root_info);
     
     //for each terminal node
     for(int v = 0; v < cardinalities.size(); v++) {
-        std::cout << cardinalities[v].second << std::endl;
         std::pair<std::vector<int>, double> umin;
         //u min = argminu csort(u,v) | u in G'       find the parent with the smallest sort cost
         
         //Create new node for the terminal
         Node * nNode = newNode(cardinalities[v].first);
         
-        //Just add it to root, for now
-        root->children.push_back(nNode);
+
+        //IF we are the root node T
+        if (root->group[0] == -1)
+            root->children.push_back(nNode);
+        else {
+            //find node in G' such that it and the node v has the smallest sort cost
+            //u_min is a node already in the tree
+            Node * u_min = find_min_sort_cost(root, nNode, file);
+            
+            //make nNode a child of u_min
+            u_min->children.push_back(nNode);
+            
+        }
+       
         
-        //G' <--- G' or v: add v to G'
-        //E' <--- E' or esort(umin, v)
+        //u min = argminu csort(u,v) | u in G'       find the parent with the smallest sort cost
+        //Find node already in G' that has the lowest sort cost for the new node
+        //for each node in G' (starting with root)
+            //find min sort cost of node, and newNode
+        //add the new node as a child of this node
+        //node->children.push_back(nNode)
+
+    
         //sortCost(cardinalities[v].first, file)
     }
     
-    for(int m = 0; m < root->children.size(); m++)
-        std::cout << root->children[m] << std::endl;
+    std::cout << "The tree is as follows: " << std::endl;
+    preord(root);
   
-    //for u in G'
-        //fix_scan(u)
+    //fix_scan()
+    //for each child node n in G'
+        //find the node that would result in the largest decrease in execution cost
+        //by changing from sort to scan cost
+        //change the sort/scan cost
    
     return root;
 }
+
+Node * find_min_sort_cost(Node * root, Node * newNode, std::string file) {
+    
+    //float current_min = sortCost(root->first, newNode->first);
+    Node * current_min_node = root;
+    
+    //If the node has no children, what would be the cost if you added it ?
+    if (root->children.size() == 0) {
+        //dont do anything
+        return current_min_node;
+        
+    }
+    else {
+        for (int i = 0; i < root->children.size(); i++) {
+            Node * node_w_min_sort_cost = find_min_sort_cost(root->children[i], newNode, file);
+            
+            if (sortCost(node_w_min_sort_cost->group, file) < sortCost(current_min_node->group, file))
+                current_min_node = node_w_min_sort_cost;
+        }
+    }
+    
+    return current_min_node;
+}
+
+void preord(Node* root) 
+{
+    
+    if (root == NULL) {
+        return;
+    }
+    
+    //Print root data
+    std::cout << "Current node is: ";
+    for (int j = 0; j < root->group.size(); j++) {
+        std::cout << root->group[j];
+    }
+    std::cout << std::endl;
+    
+    std::cout << "This node's children are: ";
+    for (int m = 0; m < root->children.size(); m++) {
+        for (int k = 0; k < root->children[m]->group.size(); k++) 
+            std::cout << root->children[m]->group[k];
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+    //Print children data from left to right
+    std::cout << "Iterating through children from left to right" << std::endl;
+    for (int i = 0; i < root->children.size(); i++) {
+        preord(root->children[i]);
+    }
+     
+} 
 
 double estimateCardinality(std::vector<int> indices, std::string filename){
 
