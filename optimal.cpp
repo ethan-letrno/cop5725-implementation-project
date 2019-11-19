@@ -37,10 +37,13 @@ int main(){
 	return 0;
 }
 
+std::string getElementForColumn(int element);
+void tokenize(std::string const &str, std::vector<std::string> &out);
+int getColumnForLineitemElement(std::string element);
 
 void OptimalSolution(Node * root, std::vector<std::vector<int>> terminals, std::string filename){
 
-	vector<Result> resultset;
+	std::vector<Result> resultset;
 	std::ifstream file;
 	std::ofstream outfile;
 	std::string current_line;
@@ -60,7 +63,7 @@ void OptimalSolution(Node * root, std::vector<std::vector<int>> terminals, std::
 
 				for(int a = 0; a < n->group.size(); a++){
 					for(int b = 0; b < out.size(); b++){
-						if(getColumnForLineitemElement(n->group[a]) == b){
+						if(n->group[a] == b){
 							out_trimmed.push_back(out[b]);
 							break;
 						}
@@ -75,7 +78,7 @@ void OptimalSolution(Node * root, std::vector<std::vector<int>> terminals, std::
 				}
 				else{
 					//Search through resultset[x] for matching gruoping, if found increment count.
-					for(int y = 0; y < resultset[x].size(); y++){
+					for(int y = 0; y < resultset.size(); y++){
 						if(resultset[y].group == out_trimmed){
 							resultset[y].count++;
 							counted = 1;
@@ -110,7 +113,7 @@ void OptimalSolution(Node * root, std::vector<std::vector<int>> terminals, std::
 				//Get columns that we need to grab for this nodes group
 				if(getColumnForLineitemElement(out[0]) != -1){
 					for(int i : n->group){
-						for(int x = 0; x < out.size(); out++){
+						for(int x = 0; x < out.size(); x++){
 							if(getColumnForLineitemElement(out[x]) == i){
 								columns.push_back(x);
 							}
@@ -139,7 +142,7 @@ void OptimalSolution(Node * root, std::vector<std::vector<int>> terminals, std::
 					}
 					else{
 						//Search through resultset[x] for matching gruoping, if found increment count.
-						for(int y = 0; y < resultset[x].size(); y++){
+						for(int y = 0; y < resultset.size(); y++){
 							if(resultset[y].group == out_trimmed){
 								resultset[y].count += stoi(out[out.size()-1]);;
 								counted = 1;
@@ -179,16 +182,68 @@ void OptimalSolution(Node * root, std::vector<std::vector<int>> terminals, std::
 				break;
 			}
 		}
+		
 
 		if(terminal == 1){
 			//If n's group is a terminal, write it to an output file.
+
+			std::string output_filename = "optimal_output_for";
+			for(int i : n->group){
+				output_filename = output_filename + "_" + getElementForColumn(i);
+			}
+			output_filename = output_filename + ".txt";
+
+			outfile.open(output_filename);
+
+			for(int x = 0; x < resultset.size(); x++){
+				for(int z = 0; z < resultset[x].group.size(); z++){
+					outfile<<resultset[x].group[z]<<", ";
+				}
+
+				outfile<<"Count = "<<resultset[x].count<<std::endl;
+			}
+
+			outfile.close();
+			outfile.clear();
 		}
 
 		if(!n->children.empty()){
 			//If this node had children, make a temp file for them to draw from, and recursively call this function.
+
+			std::string temp_filename = "t";
+			for(int i : n->group){
+				temp_filename = temp_filename + "_" + getElementForColumn(i);
+			}
+			temp_filename = temp_filename + ".txt";
+
+			outfile.open(temp_filename);
+
+			for(int i : n->group){
+				outfile<<getElementForColumn(i)<<"|";
+			}
+			outfile<<std::endl;
+
+			for(int x = 0; x < resultset.size(); x++){
+				for(int z = 0; z < resultset[x].group.size(); z++){
+					outfile<<resultset[x].group[z]<<"|";
+				}
+
+				outfile<<resultset[x].count<<std::endl;
+			}
+
+			outfile.close();
+			outfile.clear();
+
+			for(Node * m : n->children){
+				OptimalSolution(m, terminals, temp_filename);
+			}
+
 		}
 
 	}
+
+	//Delete temp files once execution is complete.
+	system("DEL t_*.txt");
 
 }
 
@@ -248,6 +303,31 @@ int getColumnForLineitemElement(std::string element){
 	else{
 		return -1;
 	}
+
+}
+
+std::string getElementForColumn(int element){
+
+	switch (element) 
+   { 
+       case 0: return "ORDERKEY"; 
+       case 1: return "PARTKEY"; 
+       case 2: return "SUPPKEY"; 
+       case 3: return "LINENUMBER"; 
+       case 4: return "QUANTITY"; 
+       case 5: return "EXTENDEDPRICE"; 
+       case 6: return "DISCOUNT"; 
+       case 7: return "TAX"; 
+       case 8: return "RETURNFLAG"; 
+       case 9: return "LINESTATUS"; 
+       case 10: return "SHIPDATE"; 
+       case 11: return "COMMITDATE"; 
+       case 12: return "RECEIPTDATE"; 
+       case 13: return "SHIPINSTRUCT"; 
+       case 14: return "SHIPMODE"; 
+       case 15: return "COMMENT"; 
+       default: return "ERROR";  
+   } 
 
 }
 
