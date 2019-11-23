@@ -213,11 +213,11 @@ double estimateCardinality(std::vector<int> indices, std::string filename){
 }
 
 
-double sortCost(std::vector<int> indices, std::string filename){
+double scanCost(std::vector<int> indices, std::string filename){
 	return estimateCardinality(indices,filename);
 }
 
-double scanCost(std::vector<int> indices, std::string filename){
+double sortCost(std::vector<int> indices, std::string filename){
 	double car = estimateCardinality(indices,filename);
 	return (car * log2(car));
 }
