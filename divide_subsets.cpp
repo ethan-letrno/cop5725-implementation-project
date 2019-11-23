@@ -8,10 +8,11 @@
 #include <set>
 #include <ctime>
 #include <bits/stdc++.h> 
-#include <math.h>   
+#include <math.h>  
+#include <utility>  
 
-bool sortbysecdesc(const pair<std::vector<int>,double>> &a, 
-                   const pair<std::vector<int>,double>> &b) 
+bool sortbysecdesc(const std::pair<std::vector<int>,double> &a, 
+                   const std::pair<std::vector<int>,double> &b) 
 { 
        return a.second>b.second; 
 } 
@@ -19,12 +20,12 @@ bool sortbysecdesc(const pair<std::vector<int>,double>> &a,
 // Represents a node of a tree 
 struct Node 
 { 
-    std::vector<std::int>> group; 
+    std::vector<int> group; 
    	std::vector<Node *>children; 
 }; 
    
  // Utility function to create a new tree node 
-Node *newNode(std::vector<std::string>> group) 
+Node *newNode(std::vector<int> group) 
 { 
     Node *temp = new Node; 
     temp->group = group; 
@@ -34,6 +35,7 @@ Node *newNode(std::vector<std::string>> group)
 double estimateCardinality(std::vector<int> indices, std::string filename);
 double sortCost(std::vector<int> indices, std::string filename);
 double scanCost(std::vector<int> indices, std::string filename);
+void DivideSubsets(Node * u, int k, std::string filename);
 
 //COPIED FROM NAIVE.CPP
 void tokenize(std::string const &str, std::vector<std::string> &out);
@@ -41,9 +43,26 @@ int getColumnForLineitemElement(std::string element);
 
 int main(){
 
+	Node * n = newNode({1, 7, 11, 14});
+	n->children.push_back(newNode({1}));
+	n->children.push_back(newNode({7}));
+	n->children.push_back(newNode({11, 14}));
+	DivideSubsets(n, 4, "lineitem184k.table");
+
+	for(Node* c : n->children){
+		std::cout<<"NODE: ";
+		for(int i : c->group){
+			std::cout<<i<<", ";
+		}
+		std::cout<<" with cardinality "<<estimateCardinality(c->group, "lineitem184k.table")<<"\n";
+	}
+
+
 	return 0;
 
 }
+
+
 
 /* 
 
@@ -63,16 +82,16 @@ void DivideSubsets(Node * u, int k, std::string filename){
 	int p = k;
 	double lowcost = 2.0;
 	int ss_to_join = -1;
-	std::vector<std::pair<Node,double>> cardinalities;
+	std::vector<std::pair<std::vector<int>,double>> cardinalities;
 	std::vector<Node *> SS;
 
 	//Getting the cardinalities of each of u's child nodes
 	for(int x = 0; x < u->children.size(); x++){
-		cardinalities.push_back(make_pair(u->children[x], estimateCardinality(u->children[x].group, filename)));
+		cardinalities.push_back(std::make_pair(u->children[x]->group, estimateCardinality(u->children[x]->group, filename)));
 	}
 
 	//Now, cardinalities is a vector of pairs with each child node and it's cardinality estimate. Now sort on this:
-	sort(cardinalities.begin(); cardinalities.end(); sortbysecdesc);
+	std::sort(cardinalities.begin(), cardinalities.end(), sortbysecdesc);
 
 	//Fill SS with appropriate amount of subsets
 	for(int y = 0; y < p; y++){
@@ -81,6 +100,12 @@ void DivideSubsets(Node * u, int k, std::string filename){
 
 	//Going through each node in descending order of cardinality, check against each subset for which will give least cost from attach(). 
 	for(std::pair<std::vector<int>,double> v : cardinalities){
+
+		std::cout<<"[TEST] Node containing { ";
+		for(int i : v.first){
+			std::cout<<i<<" ";
+		}
+		std::cout<<"} has cardinality "<<v.second<<"\n";
 
 		for(int i = 0; i < SS.size(); i++){
 			//if Subset is empty, cost is 0 and we should fill it.
@@ -108,8 +133,8 @@ void DivideSubsets(Node * u, int k, std::string filename){
 
 				//If the newly inserted group gives the Subset 2 or more groups, make the individual ones child nodes of that SS.
 				if(SS[ss_to_join]->group.size() == 2){
-					SS[ss_to_join]->children.push_back(newNode(SS[ss_to_join]->group[0]));
-					SS[ss_to_join]->children.push_back(newNode(SS[ss_to_join]->group[1]));
+					SS[ss_to_join]->children.push_back(newNode({SS[ss_to_join]->group[0]}));
+					SS[ss_to_join]->children.push_back(newNode({SS[ss_to_join]->group[1]}));
 				}
 				else if(SS[ss_to_join]->group.size() > 2){
 					SS[ss_to_join]->children.push_back(newNode(v.first));
@@ -121,7 +146,7 @@ void DivideSubsets(Node * u, int k, std::string filename){
 			SS.back()->group.insert(SS.back()->group.end(), v.first.begin(), v.first.end());
 		}
 
-		//Resey variables
+		//Reset variables
 		ss_to_join = -1;
 		lowcost = 2;
 
@@ -136,6 +161,8 @@ void DivideSubsets(Node * u, int k, std::string filename){
 
 }
 /* ALGORITHM 6 END */
+
+
 
 double estimateCardinality(std::vector<int> indices, std::string filename){
 
