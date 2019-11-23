@@ -45,13 +45,14 @@ int getColumnForLineitemElement(std::string element);
 Node * build_preliminary_solution(std::vector< std::vector< std::string > >, std::string);
 void preord(Node* root);
 Node * find_min_sort_cost(Node *, Node *, std::string);
+void fix_scan(Node *);
 
 int main() {
     
     std::vector<std::vector<std::string>> elements = {
-		{"ORDERKEY"},
-		{"PARTKEY"},
-		{"ORDERKEY", "PARTKEY"},
+		{"SHIPINSTRUCT"},
+        {"ORDERKEY"},
+		{"ORDERKEY", "SHIPINSTRUCT"},
 	};
     
     std::string table = "lineitem184k.table";
@@ -110,14 +111,19 @@ Node * build_preliminary_solution(std::vector< std::vector< std::string > > term
         
         //Create new node for the terminal
         Node * nNode = newNode(cardinalities[v].first);
-        
-
+        std::cout << "------------------------------------------------" << std::endl;
+        std::cout << "ADD NODE TO THE TREE WITH GROUP BY: ";
+        for (int k = 0; k < nNode->group.size(); k++)
+            std::cout << nNode->group[k] << " | ";
+            
+        std::cout << std::endl;
         //IF we are the root node T
-        if (root->group[0] == -1)
+        if (root->children.size() == 0)
             root->children.push_back(nNode);
         else {
             //find node in G' such that it and the node v has the smallest sort cost
             //u_min is a node already in the tree
+           
             Node * u_min = find_min_sort_cost(root, nNode, file);
             
             //make nNode a child of u_min
@@ -125,50 +131,78 @@ Node * build_preliminary_solution(std::vector< std::vector< std::string > > term
             
         }
        
+        std::cout << "The tree is currently as follows: " << std::endl;
+        preord(root);
         
-        //u min = argminu csort(u,v) | u in G'       find the parent with the smallest sort cost
-        //Find node already in G' that has the lowest sort cost for the new node
-        //for each node in G' (starting with root)
-            //find min sort cost of node, and newNode
-        //add the new node as a child of this node
-        //node->children.push_back(nNode)
-
-    
-        //sortCost(cardinalities[v].first, file)
     }
     
-    std::cout << "The tree is as follows: " << std::endl;
+    fix_scan(root);
+    std::cout << "The tree is currently as follows: " << std::endl;
     preord(root);
   
-    //fix_scan()
-    //for each child node n in G'
-        //find the node that would result in the largest decrease in execution cost
-        //by changing from sort to scan cost
-        //change the sort/scan cost
    
     return root;
 }
 
-Node * find_min_sort_cost(Node * root, Node * newNode, std::string file) {
+void fix_scan(Node * root) {
+    //for each children node of root
+    for (int i = 0; i < root->children.size(); i++) {
+        
+        int match = 0;
+        for(int j = 0; j < root->children[i]->group.size(); j++) {
+            //go up to the children's name. if we run out and still find a match, we are good
+            if (root->children[i]->group[j] == root->group[j]) { //assumes the parents group by is larger
+                match = 1;
+            }
+            else
+                match = 0;
+            
+        }
+        
+        if (match) {
+            //move to the front of the list
+            root->children.insert(root->children.begin(), root->children[i]);
+            root->children.erase(root->children.begin()+i+1);
+        }
+        
+        fix_scan(root->children[i]);
+        
+        
+    }
+}
+
+Node * find_min_sort_cost(Node * currentNode, Node * newNode, std::string file) {
     
     //float current_min = sortCost(root->first, newNode->first);
-    Node * current_min_node = root;
+    Node * current_min_node = currentNode;
+    
     
     //If the node has no children, what would be the cost if you added it ?
-    if (root->children.size() == 0) {
+    if (currentNode->children.size() == 0) {
         //dont do anything
         return current_min_node;
         
     }
     else {
-        for (int i = 0; i < root->children.size(); i++) {
-            Node * node_w_min_sort_cost = find_min_sort_cost(root->children[i], newNode, file);
+        for (int i = 0; i < currentNode->children.size(); i++) {
+            int contains_attribute = 0;
             
-            if (sortCost(node_w_min_sort_cost->group, file) < sortCost(current_min_node->group, file))
-                current_min_node = node_w_min_sort_cost;
+            
+            
+            for(int j = 0; j < newNode->group.size(); j++) {
+                if (newNode->group[j] == currentNode->group[j])
+                    contains_attribute = 1;
+                
+            }
+            if (contains_attribute == 1 || currentNode->group[0] == -1) {
+
+                Node * node_w_min_sort_cost = find_min_sort_cost(currentNode->children[i], newNode, file);
+
+                if (sortCost(node_w_min_sort_cost->group, file) < sortCost(current_min_node->group, file))
+                    current_min_node = node_w_min_sort_cost;
+            }
         }
     }
-    
     return current_min_node;
 }
 
@@ -194,7 +228,7 @@ void preord(Node* root)
     }
     std::cout << std::endl;
     //Print children data from left to right
-    std::cout << "Iterating through children from left to right" << std::endl;
+    std::cout << "Iterating through children from left to right:" << std::endl;
     for (int i = 0; i < root->children.size(); i++) {
         preord(root->children[i]);
     }
@@ -202,10 +236,14 @@ void preord(Node* root)
 } 
 
 double estimateCardinality(std::vector<int> indices, std::string filename){
+    
+    //If this is the root, or insert table, cardinality is max at 1
+    if (indices[0] == -1)
+        return 1; 
 
 	std::ifstream file;
 	srand(time(0));
-	int row = rand() % 20000 + 1; //Get random row from row 1 to 20,000 (we assume each table will have at least this many + 1000 rows)
+	int row = rand() % 20000+ 1; //Get random row from row 1 to 20,000 (we assume each table will have at least this many + 1000 rows)
 	std::string current_line;
 	std::vector<std::string> out;
 	std::vector<std::string> out_trimmed;
@@ -245,7 +283,7 @@ double estimateCardinality(std::vector<int> indices, std::string filename){
 	file.close();
 
 	//This will return a number from 0 - 1, a 1 indicating that every single line was unique. So, the higher this number, the higher the cardinality estimated.
-	return (dv.size()/500.0);
+	return (dv.size()/500);
 
 }
 
