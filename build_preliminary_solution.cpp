@@ -8,6 +8,7 @@
 #include <ctime>
 #include <bits/stdc++.h> 
 #include <math.h>
+#include "utils.h"
 
 //Taken from naive, and divide_subsets
 bool sortbysecdesc(const std::pair<std::vector<int>,double> &a, const std::pair<std::vector<int>,double> &b)
@@ -21,6 +22,7 @@ bool sortbygroup(const std::pair<std::vector<int>,double> &a, const std::pair<st
     
 }
 
+/*
 // Represents a node of a tree 
 struct Node 
 { 
@@ -35,18 +37,20 @@ Node *newNode(std::vector< int > group)
     Node *temp = new Node; 
     temp->group = group; 
     return temp; 
-}
+} */
 
-double estimateCardinality(std::vector<int> indices, std::string filename);
-double sortCost(std::vector<int> indices, std::string filename);
-double scanCost(std::vector<int> indices, std::string filename);
-void tokenize(std::string const &str, std::vector<std::string> &out);
-int getColumnForLineitemElement(std::string element);
-Node * build_preliminary_solution(std::vector< std::vector< std::string > >, std::string);
-void preord(Node* root);
+//double estimateCardinality(std::vector<int> indices, std::string filename);
+
+//double sortCost(std::vector<int> indices, std::string filename);
+//double scanCost(std::vector<int> indices, std::string filename);
+//void tokenize(std::string const &str, std::vector<std::string> &out);
+//int getColumnForLineitemElement(std::string element);
+//Node * build_preliminary_solution(std::vector< std::vector< std::string > >, std::string);
+//void preord(Node* root);
 Node * find_min_sort_cost(Node *, Node *, std::string);
 void fix_scan(Node *);
 
+/*
 int main() {
     
     std::vector<std::vector<std::string>> elements = {
@@ -60,7 +64,7 @@ int main() {
     Node * G_prime = build_preliminary_solution(elements, table);
     
     return 0;
-}
+} */
 
 /*
  *Returns a solution tree including only terminal nodes (and root node).
@@ -197,7 +201,8 @@ Node * find_min_sort_cost(Node * currentNode, Node * newNode, std::string file) 
             if (contains_attribute == 1 || currentNode->group[0] == -1) {
 
                 Node * node_w_min_sort_cost = find_min_sort_cost(currentNode->children[i], newNode, file);
-
+                std::cout << "Sort cost of current node: " << sortCost(node_w_min_sort_cost->group, file) << std::endl;
+                std::cout << "Sort cost of current min: " << sortCost(current_min_node->group, file) << std::endl;
                 if (sortCost(node_w_min_sort_cost->group, file) < sortCost(current_min_node->group, file))
                     current_min_node = node_w_min_sort_cost;
             }
@@ -206,6 +211,7 @@ Node * find_min_sort_cost(Node * currentNode, Node * newNode, std::string file) 
     return current_min_node;
 }
 
+/*
 void preord(Node* root) 
 {
     
@@ -233,8 +239,9 @@ void preord(Node* root)
         preord(root->children[i]);
     }
      
-} 
+}  */
 
+/*
 double estimateCardinality(std::vector<int> indices, std::string filename){
     
     //If this is the root, or insert table, cardinality is max at 1
@@ -285,8 +292,9 @@ double estimateCardinality(std::vector<int> indices, std::string filename){
 	//This will return a number from 0 - 1, a 1 indicating that every single line was unique. So, the higher this number, the higher the cardinality estimated.
 	return (dv.size()/500);
 
-}
+}  */
 
+/*
 double scanCost(std::vector<int> indices, std::string filename){
 	return estimateCardinality(indices,filename);
 }
@@ -360,6 +368,6 @@ void tokenize(std::string const &str, std::vector<std::string> &out){
 		end = str.find('|', start);
 		out.push_back(str.substr(start, end - start));
 	}
-}
+} */
 
 

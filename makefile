@@ -1,11 +1,17 @@
 CXX = g++
 CXXFLAGS = -std=c++11
 
-naive : naive.o
-	$(CXX) $(CXXFLAGS) -o naive naive.o
+tds : main.o build_preliminary_solution.o utils.o
+	$(CXX) $(CXXFLAGS) -o tds main.o build_preliminary_solution.o utils.o
 	
-naive.o : naive.cpp
-	$(CXX) $(CXXFLAGS) -c naive.cpp
+main.o : main.cpp
+	$(CXX) $(CXXFLAGS) -c main.cpp
+
+build_preliminary_solution.o : build_preliminary_solution.cpp
+	$(CXX) $(CXXFLAGS) -c build_preliminary_solution.cpp
+
+utils.o : utils.cpp
+	$(CXX) $(CXXFLAGS) -c utils.cpp
 	
 clean:
-	rm naive.o naive
+	rm tds *.o
