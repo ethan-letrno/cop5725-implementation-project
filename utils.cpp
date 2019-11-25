@@ -66,14 +66,10 @@ void tokenize(std::string const &str, std::vector<std::string> &out){
 }
 
 double estimateCardinality(std::vector<int> indices, std::string filename){
-    
-    //If this is the root, or insert table, cardinality is max at 1
-    if (indices[0] == -1)
-        return 1; 
 
 	std::ifstream file;
 	srand(time(0));
-	int row = rand() % 20000+ 1; //Get random row from row 1 to 20,000 (we assume each table will have at least this many + 1000 rows)
+	int row = rand() % 20000 + 1; //Get random row from row 1 to 20,000 (we assume each table will have at least this many + 1000 rows)
 	std::string current_line;
 	std::vector<std::string> out;
 	std::vector<std::string> out_trimmed;
@@ -112,10 +108,20 @@ double estimateCardinality(std::vector<int> indices, std::string filename){
 
 	file.close();
 
-	//This will return a number from 0 - 1, a 1 indicating that every single line was unique. So, the higher this number, the higher the cardinality estimated.
-	return (dv.size()/500);
+	
 
-} 
+	std::string length ="";
+	for(char i : filename){
+		if(i != '.'){
+			length.push_back(i);
+		}
+		else break;
+	}
+
+	//Returns estimate of actual number of rows in table.
+	return (std::stod(length)*(dv.size()/500.0));
+
+}
 
 double scanCost(std::vector<int> indices, std::string filename){
 	return estimateCardinality(indices,filename);
