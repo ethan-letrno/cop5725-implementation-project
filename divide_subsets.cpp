@@ -156,7 +156,8 @@ void DivideSubsets(Node * u, int k, std::string filename){
 	u->children.clear();
 
 	for(Node * ss : SS){
-		u->children.push_back(ss);
+		if(!ss->group.empty())
+			u->children.push_back(ss);
 	}
 
 }
