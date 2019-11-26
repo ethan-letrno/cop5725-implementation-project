@@ -128,13 +128,11 @@ double scanCost(std::vector<int> indices, std::string filename){
 }
 
 double sortCost(std::vector<int> indices, std::string filename){
+    if (indices[0] == -1)
+        return (184000 * log2(184000));
+    
 	double car = estimateCardinality(indices,filename);
-    std::cout << std::endl << "CAR IS************* " << car << std::endl;
-    std::cout << log2 (car) << std::endl;
-    if (isinf(log2 (car)))
-        return 0;
-    else
-        return (car * log2 (car));
+    return (car * log2 (car));
 }
 
 int getColumnForLineitemElement(std::string element){

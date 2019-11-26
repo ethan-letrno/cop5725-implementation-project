@@ -18,11 +18,12 @@ int main() {
     std::vector<std::vector<std::string>> elements = {
         {"ORDERKEY"},
         {"SHIPINSTRUCT"},
-        {"SHIPMODE"},
+        {"COMMITDATE"}, 
 		{"ORDERKEY", "SHIPINSTRUCT"},
+        {"ORDERKEY", "SHIPINSTRUCT", "COMMITDATE"}
 	};
     
-    std::string table = "lineitem184k.table";
+    std::string table = "184000.table";
     
     Node * G_prime = build_preliminary_solution(elements, table);
     //topdown split (G'.root, k)
