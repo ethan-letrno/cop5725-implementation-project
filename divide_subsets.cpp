@@ -66,7 +66,7 @@ ALGORITHM 6 - DIVIDE SUBSETS (u = Node to divide children of, k = Number of init
 
 
 */
-void DivideSubsets(Node * u, int k, std::string filename){
+std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 
 	int p = k;
 	double lowcost = 2.0;
@@ -142,12 +142,14 @@ void DivideSubsets(Node * u, int k, std::string filename){
 	}
 
 	//Now that all the subsets have been divided, remake the children of node u to be those in the subset. (Should we do this?)
-	u->children.clear();
+	/*u->children.clear();
 
 	for(Node * ss : SS){
 		if(!ss->group.empty())
 			u->children.push_back(ss);
-	}
+	} */
+    
+    return SS;
 
 }
 /* ALGORITHM 6 END */

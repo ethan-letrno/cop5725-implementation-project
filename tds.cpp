@@ -30,16 +30,16 @@ Node *newNode(std::vector<int> group)
 } */
 
 
-void TopDownSplit(Node * u, int k, std::string filename){
+void TopDownSplit(Node * u, int k, std::string filename, Node * g_prime){
 
 	int b = 0;
 
 	do{
-		b = partition_children(u, k, filename);
+		b = partition_children(u, k, filename, g_prime);
 	}while(b != 0);
 
 	for( Node * v : u->children){
-		TopDownSplit(v, k, filename);
+		TopDownSplit(v, k, filename, g_prime);
 	}
 
 }

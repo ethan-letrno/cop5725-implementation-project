@@ -1,5 +1,5 @@
 #ifndef _DIVIDE_SUBSETS_H
 
-void DivideSubsets(Node * u, int k, std::string filename);
+std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename);
 
 #endif

@@ -28,7 +28,7 @@ int main() {
     std::string table = "184000.table";
     
     Node * G_prime = build_preliminary_solution(elements, table);
-    TopDownSplit(G_prime, 2, table);
+    TopDownSplit(G_prime, 2, table, G_prime);
     
     preord(G_prime);
     

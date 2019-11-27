@@ -14,10 +14,12 @@
 
 
 double get_cost(Node *, std::string);
+//Node * get_potential_tree(Node * u, std::vector<Node*>, Node * g_prime) 
+
 //int partition_children(Node *, int, std::string);
 
 
-int partition_children(Node * u, int k, std::string filename) {
+int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
     //Find the best strategy to partition children of node u into at most k subsets
     
     //returns true if it can find a way to optimize u (split children of node u into smaller subsets)
@@ -27,41 +29,56 @@ int partition_children(Node * u, int k, std::string filename) {
     if (q <= 1)
         return 0;
     
-    double C_min = get_cost(u, filename);
-    std::cout << "The current cost of the tree is: " << C_min << std::endl;
+    double C_min = get_cost(g_prime, filename);
                  
     std::vector< Node * > SS;
+    std::vector<Node *> A;
     
     if (k > q)
         k = q;
         
-    for (int k_prime = 0; k_prime < k; k_prime++) {
-        DivideSubsets(u, k_prime, filename);
         
+    for (int k_prime = 0; k_prime < k; k_prime++) {
+        
+        A = DivideSubsets(u, k_prime, filename);
+
         //compute new cost of C prime
+        //This needs changed. We don't want the cost of a node u, as this might not be the root.
+        //Need to ADD the subsets into the tree and THEN check the cost.
+        //and we need to do this without actually changing the original tree
+        //new_g_prime = get_potential_tree(u, A, g_prime);
+        //c_prime = get_cost(new_g_prime, filename);
+        
+        
         double C_prime = get_cost(u, filename);
         
+        
+        //Then, if the cost of the added nodes is better, we remember them. 
         if (C_prime < C_min) {
             C_min = C_prime;
-            SS.push_back(u);
+            SS = A;
         }
     }
     
     if (!SS.empty()) {
         /*
-        update G prime according to SS 
-        remove edges from u to children
         add new nodes and edges from u to new nodes
         add new edges from new nodes to previous children of u
         */
-        for (int i = 0; i < SS.size(); i++)
-            std::cout << SS[i]->group[0] << std::endl;
         return 1;
     }
     else
         return 0;
     
 }
+
+/*
+Node * get_potential_tree(Node * u, std::vector<Node*> A, Node * g_prime) {
+        
+        
+}
+*/
+
 
 double get_cost(Node * root, std::string file) {
     //Gets the cost of each edge

@@ -1,5 +1,5 @@
 #ifndef _TDS_H
 
-void TopDownSplit(Node * u, int k, std::string filename);
+void TopDownSplit(Node * u, int k, std::string filename, Node *);
 
 #endif
