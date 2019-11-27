@@ -53,7 +53,7 @@ void preord(Node* root)
     }
     std::cout << std::endl;
     //Print children data from left to right
-    std::cout << "Iterating through children from left to right:" << std::endl;
+    //std::cout << "Iterating through children from left to right:" << std::endl;
     for (int i = 0; i < root->children.size(); i++) {
         preord(root->children[i]);
     }
