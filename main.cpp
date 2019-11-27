@@ -10,7 +10,9 @@
 #include <bits/stdc++.h> 
 #include <math.h>  
 #include <utility>
+#include "utils.h"
 #include "build_preliminary_solution.h"
+#include "tds.h"
 
 
 int main() {
@@ -19,14 +21,16 @@ int main() {
         {"ORDERKEY"},
         {"SHIPINSTRUCT"},
         {"COMMITDATE"}, 
-		{"ORDERKEY", "SHIPINSTRUCT"},
+		//{"ORDERKEY", "SHIPINSTRUCT"},
         {"ORDERKEY", "SHIPINSTRUCT", "COMMITDATE"}
 	};
     
     std::string table = "184000.table";
     
     Node * G_prime = build_preliminary_solution(elements, table);
-    //topdown split (G'.root, k)
+    TopDownSplit(G_prime, 2, table);
+    
+    preord(G_prime);
     
     
 }

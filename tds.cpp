@@ -9,8 +9,11 @@
 #include <ctime>
 #include <bits/stdc++.h> 
 #include <math.h>  
-#include <utility>  
+#include <utility>
+#include "utils.h"
+#include "partition_children.h"
 
+/*
 // Represents a node of a tree 
 struct Node 
 { 
@@ -24,31 +27,19 @@ Node *newNode(std::vector<int> group)
     Node *temp = new Node; 
     temp->group = group; 
     return temp; 
-} 
+} */
 
-void TopDownSplit(Node * u, int k, std::string filename);
-int PartitionChildren(Node * u, int k, std::string filename);
-
-
-int main(){
-
-	return 0;
-}
 
 void TopDownSplit(Node * u, int k, std::string filename){
 
 	int b = 0;
 
 	do{
-		b = PartitionChildren(u, k, filename);
+		b = partition_children(u, k, filename);
 	}while(b != 0);
 
 	for( Node * v : u->children){
 		TopDownSplit(v, k, filename);
 	}
 
-}
-
-int PartitionChildren(Node * u, int k, std::string filename){
-	return 0;
 }

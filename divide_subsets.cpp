@@ -9,29 +9,18 @@
 #include <ctime>
 #include <bits/stdc++.h> 
 #include <math.h>  
-#include <utility>  
+#include <utility>
+#include "utils.h"
 
+/*
 bool sortbysecdesc(const std::pair<std::vector<int>,double> &a, 
                    const std::pair<std::vector<int>,double> &b) 
 { 
        return a.second>b.second; 
-} 
+} */
    
-// Represents a node of a tree 
-struct Node 
-{ 
-    std::vector<int> group; 
-   	std::vector<Node *>children; 
-}; 
-   
- // Utility function to create a new tree node 
-Node *newNode(std::vector<int> group) 
-{ 
-    Node *temp = new Node; 
-    temp->group = group; 
-    return temp; 
-} 
 
+/*
 double estimateCardinality(std::vector<int> indices, std::string filename);
 double sortCost(std::vector<int> indices, std::string filename);
 double scanCost(std::vector<int> indices, std::string filename);
@@ -60,7 +49,7 @@ int main(){
 
 	return 0;
 
-}
+ */
 
 
 
@@ -101,11 +90,11 @@ void DivideSubsets(Node * u, int k, std::string filename){
 	//Going through each node in descending order of cardinality, check against each subset for which will give least cost from attach(). 
 	for(std::pair<std::vector<int>,double> v : cardinalities){
 
-		std::cout<<"[TEST] Node containing { ";
+		/*std::cout<<"[TEST] Node containing { ";
 		for(int i : v.first){
 			std::cout<<i<<" ";
 		}
-		std::cout<<"} has cardinality "<<v.second<<"\n";
+		std::cout<<"} has cardinality "<<v.second<<"\n"; */
 
 		for(int i = 0; i < SS.size(); i++){
 			//if Subset is empty, cost is 0 and we should fill it.
@@ -163,7 +152,7 @@ void DivideSubsets(Node * u, int k, std::string filename){
 }
 /* ALGORITHM 6 END */
 
-
+ /*
 
 double estimateCardinality(std::vector<int> indices, std::string filename){
 
@@ -292,4 +281,4 @@ void tokenize(std::string const &str, std::vector<std::string> &out){
 		end = str.find('|', start);
 		out.push_back(str.substr(start, end - start));
 	}
-}
+} */

@@ -25,6 +25,12 @@ Node *newNode(std::vector< int > group)
     return temp; 
 }
 
+bool sortbysecdesc(const std::pair<std::vector<int>,double> &a, 
+                   const std::pair<std::vector<int>,double> &b) 
+{ 
+       return a.second>b.second; 
+}
+
 void preord(Node* root) 
 {
     

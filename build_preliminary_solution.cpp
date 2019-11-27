@@ -11,10 +11,11 @@
 #include "utils.h"
 
 //Taken from naive, and divide_subsets
+/*
 bool sortbysecdesc(const std::pair<std::vector<int>,double> &a, const std::pair<std::vector<int>,double> &b)
 {
     return (a.second > b.second);
-}
+} */
 
 bool sortbygroup(const std::pair<std::vector<int>,double> &a, const std::pair<std::vector<int>,double> &b)
 {
