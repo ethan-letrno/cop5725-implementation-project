@@ -18,11 +18,11 @@
 int main() {
     
     std::vector<std::vector<std::string>> elements = {
-        {"ORDERKEY"},
-        {"SHIPINSTRUCT"},
-        {"COMMITDATE"}, 
-		//{"ORDERKEY", "SHIPINSTRUCT"},
-        {"ORDERKEY", "SHIPINSTRUCT", "COMMITDATE"}
+        {"DISCOUNT", "TAX"},
+        {"RETURNFLAG", "TAX"},
+        {"RETURNFLAG","LINESTATUS"}, 
+	{"SHIPDATE", "SHIPINSTRUCT"},
+        {"SHIPMODE", "TAX"}
 	};
     
     std::string table = "184000.table";
