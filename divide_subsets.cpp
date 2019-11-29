@@ -69,7 +69,7 @@ ALGORITHM 6 - DIVIDE SUBSETS (u = Node to divide children of, k = Number of init
 std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 
 	int p = k;
-	double lowcost = 2.0;
+	double lowcost = 2000000.0;
 	int ss_to_join = -1;
 	std::vector<std::pair<std::vector<int>,double>> cardinalities;
 	std::vector<Node *> SS;
@@ -118,7 +118,14 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 		if(ss_to_join != -1){
 			if(ss_to_join == -2){ }
 			else{
-				SS[ss_to_join]->group.insert(SS[ss_to_join]->group.end(), v.first.begin(), v.first.end());
+
+				//Here, need to make sure were not inserting duplicate indicies
+				for(int i : v.first){
+					if(!std::count(SS[ss_to_join]->group.begin(), SS[ss_to_join]->group.end(), i)){
+						SS[ss_to_join]->group.push_back(i);
+					}
+				}
+				//SS[ss_to_join]->group.insert(SS[ss_to_join]->group.end(), v.first.begin(), v.first.end());
 
 				//If the newly inserted group gives the Subset 2 or more groups, make the individual ones child nodes of that SS.
 				if(SS[ss_to_join]->group.size() == 2){
@@ -137,17 +144,19 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 
 		//Reset variables
 		ss_to_join = -1;
-		lowcost = 2;
+		lowcost = 2000000.0;
 
 	}
 
 	//Now that all the subsets have been divided, remake the children of node u to be those in the subset. (Should we do this?)
-	/*u->children.clear();
-
+	std::cout<<"DIV SUBSETS: FOR K = "<<k<<" (Subset size is "<<SS.size()<<")"<<std::endl;
 	for(Node * ss : SS){
-		if(!ss->group.empty())
-			u->children.push_back(ss);
-	} */
+		for(int ch : ss->group){
+			std::cout<<ch<<", ";			
+		}
+		std::cout<<"cardinality = "<<sortCost(ss->group, filename)<<std::endl;
+
+	} 
     
     return SS;
 
