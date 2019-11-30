@@ -15,7 +15,7 @@
 
 double get_cost(Node *, std::string);
 void get_copy(Node *, Node *);
-void add_subsets(Node *, std::vector<Node*>, std::string);
+void add_subsets(Node *, std::vector<Node*>, std::string, Node *);
 
 //int partition_children(Node *, int, std::string);
 
@@ -39,7 +39,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         k = q;
         
         
-    for (int k_prime = 0; k_prime < k; k_prime++) {
+    for (int k_prime = 1; k_prime <= k; k_prime++) {
         
         A = DivideSubsets(u, k_prime, filename);
 
@@ -55,7 +55,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         
         //now add subsets to new_g_prime
         //std::cout << std::endl << std::endl << std::endl;
-        add_subsets(new_g_prime, A, filename);
+        add_subsets(new_g_prime, A, filename, u);
         
         //std::cout << "NEW TREE-------------------" << std::endl;
         //preord(new_g_prime);
@@ -78,7 +78,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         add new nodes and edges from u to new nodes
         add new edges from new nodes to previous children of u
         */
-        add_subsets(g_prime, SS, filename);
+        add_subsets(g_prime, SS, filename, u);
         return 1;
     }
     else
@@ -103,48 +103,56 @@ void get_copy(Node * g_prime, Node * newRoot) {
     //return newRoot;?
 }
 
-void add_subsets(Node * root, std::vector<Node*> A, std::string filename) {
+void add_subsets(Node * root, std::vector<Node*> A, std::string filename, Node * u) {
     //sort the subset
     
-    std::vector<std::pair<std::vector<int>,double>> cardinalities;
+    for(int i = 0; i < root->children.size(); i++) {
+        if (u->group == root->group) {
 
-	//Getting the cardinalities of each of u's child nodes
-    //std::cout << A.size() << std::endl;
-	for(int x = 0; x < A.size(); x++){
-		cardinalities.push_back(std::make_pair(A[x]->group, estimateCardinality(A[x]->group, filename)));
-        //std::cout << estimateCardinality(A[x]->group, filename) << std::endl;
-	}
-
-	std::sort(cardinalities.begin(), cardinalities.end(), sortbysecdesc);
-    
-    std::vector<int> unioned_subset;
-    for(int x = 0; x < cardinalities.size(); x++){
-        for (int j = 0; j < cardinalities[x].first.size(); j++)
-            unioned_subset.push_back(cardinalities[x].first[j]);
-	}
-    
-    Node * union_node = newNode(unioned_subset);
-    
-    //add the node to the tree
-    /*std::cout << "Root children: " << std::endl;
-    for (int i = 0; i < root->children.size(); i++) {
-        for(int j = 0; j < root->children[i]->group.size(); j++) {
-            std::cout << root->children[i]->group[j] << std::endl;
+            std::vector<std::pair<std::vector<int>,double>> cardinalities;
+        
+            //Getting the cardinalities of each of u's child nodes
+            //std::cout << A.size() << std::endl;
+            for(int x = 0; x < A.size(); x++){
+                cardinalities.push_back(std::make_pair(A[x]->group, estimateCardinality(A[x]->group, filename)));
+                //std::cout << estimateCardinality(A[x]->group, filename) << std::endl;
+            }
+        
+            std::sort(cardinalities.begin(), cardinalities.end(), sortbysecdesc);
+            
+            std::vector<int> unioned_subset;
+            for(int x = 0; x < cardinalities.size(); x++){
+                for (int j = 0; j < cardinalities[x].first.size(); j++)
+                    unioned_subset.push_back(cardinalities[x].first[j]);
+            }
+            
+            Node * union_node = newNode(unioned_subset);
+            
+            //add the node to the tree
+            /*std::cout << "Root children: " << std::endl;
+            for (int i = 0; i < root->children.size(); i++) {
+                for(int j = 0; j < root->children[i]->group.size(); j++) {
+                    std::cout << root->children[i]->group[j] << std::endl;
+                }
+            }*/
+            
+            union_node->children = root->children;
+            
+            /*std::cout << "Union children: " << std::endl;
+            for (int i = 0; i < union_node->children.size(); i++) {
+                for(int j = 0; j < union_node->children[i]->group.size(); j++) {
+                    std::cout << union_node->children[i]->group[j] << std::endl;
+                }
+            } */
+            
+            
+            root->children.clear();
+            root->children.push_back(union_node);
         }
-    }*/
-    
-    union_node->children = root->children;
-    
-    /*std::cout << "Union children: " << std::endl;
-    for (int i = 0; i < union_node->children.size(); i++) {
-        for(int j = 0; j < union_node->children[i]->group.size(); j++) {
-            std::cout << union_node->children[i]->group[j] << std::endl;
-        }
-    } */
-    
-    
-    root->children.clear();
-    root->children.push_back(union_node);
+        else
+            add_subsets(root->children[i], A, filename, u);
+            
+    }
     
 }
 
