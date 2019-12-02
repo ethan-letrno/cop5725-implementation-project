@@ -1,0 +1,36 @@
+0.04, N, Count = 91896
+0.09, N, Count = 92105
+0.10, N, Count = 92231
+0.07, N, Count = 92319
+0.00, N, Count = 91712
+0.06, R, Count = 44685
+0.10, R, Count = 45007
+0.06, A, Count = 44937
+0.01, A, Count = 44660
+0.04, R, Count = 44964
+0.10, A, Count = 44749
+0.03, N, Count = 92558
+0.02, R, Count = 44599
+0.07, R, Count = 44577
+0.08, A, Count = 44632
+0.08, N, Count = 92578
+0.06, N, Count = 91945
+0.05, N, Count = 92240
+0.02, N, Count = 92435
+0.09, A, Count = 45086
+0.02, A, Count = 44646
+0.05, A, Count = 45060
+0.09, R, Count = 44932
+0.01, N, Count = 92017
+0.05, R, Count = 44987
+0.03, A, Count = 44798
+0.00, R, Count = 44849
+0.04, A, Count = 45041
+0.03, R, Count = 44695
+0.01, R, Count = 44900
+0.00, A, Count = 44548
+0.08, R, Count = 44820
+0.07, A, Count = 44792
+
+Finished querying at Mon Dec 02 12:01:31 2019
+, elapsed time = 45.9591 seconds
