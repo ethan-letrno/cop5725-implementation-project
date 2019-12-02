@@ -1,0 +1,14 @@
+1, O, Count = 250328
+2, O, Count = 214415
+3, O, Count = 178661
+4, O, Count = 143042
+5, O, Count = 107324
+6, O, Count = 71391
+1, F, Count = 249557
+2, F, Count = 213899
+3, F, Count = 178371
+4, F, Count = 142684
+5, F, Count = 107205
+6, F, Count = 71616
+7, O, Count = 35854
+7, F, Count = 35653

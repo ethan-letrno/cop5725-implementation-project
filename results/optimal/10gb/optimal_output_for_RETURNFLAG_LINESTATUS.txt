@@ -1,0 +1,4 @@
+N, O, Count = 1001015
+R, F, Count = 493015
+A, F, Count = 492949
+N, F, Count = 13021
