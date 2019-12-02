@@ -1,0 +1,17 @@
+O, TRUCK, Count = 143012
+O, MAIL, Count = 142665
+O, REG AIR, Count = 142868
+O, AIR, Count = 143569
+O, FOB, Count = 142597
+O, RAIL, Count = 142984
+F, AIR, Count = 142678
+F, RAIL, Count = 142756
+F, SHIP, Count = 143066
+F, TRUCK, Count = 142644
+F, FOB, Count = 142537
+O, SHIP, Count = 143320
+F, MAIL, Count = 142629
+F, REG AIR, Count = 142675
+
+Finished querying at Mon Dec 02 17:51:51 2019
+, elapsed time = 351.288 seconds
