@@ -1,0 +1,11 @@
+O, DELIVER IN PERSON, Count = 249599
+O, TAKE BACK RETURN, Count = 250227
+O, NONE, Count = 251005
+F, NONE, Count = 249764
+F, TAKE BACK RETURN, Count = 249233
+F, DELIVER IN PERSON, Count = 249970
+O, COLLECT COD, Count = 250184
+F, COLLECT COD, Count = 250018
+
+Finished querying at Mon Dec 02 12:10:09 2019
+, elapsed time = 131.653 seconds
