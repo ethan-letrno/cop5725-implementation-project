@@ -37,9 +37,10 @@ void TopDownSplit(Node * u, int k, std::string filename, Node * g_prime){
 	do{
 		b = partition_children(u, k, filename, g_prime);
 	}while(b != 0);
-
-	for( Node * v : u->children){
-		TopDownSplit(v, k, filename, g_prime);
+	if(!u->children.empty()){
+		for( Node * v : u->children){
+			TopDownSplit(v, k, filename, v);
+		}
 	}
 
 }
