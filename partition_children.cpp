@@ -63,7 +63,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         //and compute the  new cost
         double C_prime = get_cost(new_g_prime, filename);
         
-        //std::cout << C_prime << std::endl; 
+        std::cout <<"New cost would be: "<< C_prime << ", Old cost was "<<C_min<< std::endl; 
         
         
         //Then, if the cost of the added nodes is better, we remember them. 
@@ -78,7 +78,32 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         add new nodes and edges from u to new nodes
         add new edges from new nodes to previous children of u
         */
-        add_subsets(g_prime, SS, filename, u);
+
+        int is_same = 1;
+
+        if(SS.size() == u->children.size()){
+            for(int x = 0; x < SS.size(); x++){
+                if(SS[x]->group != u->children[x]->group){
+                    std::cout<<"Not same.\n";
+                    is_same = 0;
+                    break;
+                }
+            }
+
+            if(is_same == 1)
+                return 0;
+        }
+
+
+        //Now that all the subsets have been divided, remake the children of node u to be those in the subset. (Should we do this?)
+        u->children.clear();
+
+        for(Node * ss : SS){
+            if(!ss->group.empty())
+                u->children.push_back(ss);
+        }
+
+        //add_subsets(g_prime, SS, filename, u);
         return 1;
     }
     else
@@ -176,8 +201,10 @@ double get_cost(Node * root, std::string file) {
     
     //For each child of root
     for (int i = 0; i < root->children.size(); i++) {
-        //If it's the first child, it is the one scan cost for this node
-        if (i == 0)
+        
+        //If it's the first child, it is the one scan cost for this node <-- WRONG,
+            //******** It's only a scan cost if the first group of the root is the first group of the child.
+        if (root->children[i]->group[0] == root->group[0] /*&& i == 0*/)
             total_cost += scanCost(root->group, file);
         else //else you must sort the node
             total_cost += sortCost(root->group, file);
@@ -191,3 +218,4 @@ double get_cost(Node * root, std::string file) {
     
     return total_cost;
 }
+
