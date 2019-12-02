@@ -1,0 +1,17 @@
+NAIVE:
+2. 55.0069 seconds
+4. 176.544 seconds
+6. 212.949 seconds
+8. 280.932 seconds
+10. 339.832 seconds
+20. 684.322 seconds
+25. 868.145 seconds
+
+OPT:
+2. 45.9591 seconds
+4. 131.653 seconds
+6. 87.7243 seconds
+8. 123.715 seconds
+10. 158.86 seconds
+20. 351.288 seconds
+25. 422.771 seconds
