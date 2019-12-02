@@ -71,7 +71,9 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 	int p = k;
 	double lowcost = 2000000.0;
 	int ss_to_join = -1;
+	int indice_counter = -1;
 	std::vector<std::pair<std::vector<int>,double>> cardinalities;
+	std::vector<std::pair<std::vector<int>,int>> children_nodes;
 	std::vector<Node *> SS;
 
 	//Getting the cardinalities of each of u's child nodes
@@ -89,6 +91,7 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 
 	//Going through each node in descending order of cardinality, check against each subset for which will give least cost from attach(). 
 	for(std::pair<std::vector<int>,double> v : cardinalities){
+		indice_counter++;
 
 		/*std::cout<<"[TEST] Node containing { ";
 		for(int i : v.first){
@@ -100,6 +103,7 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 			//if Subset is empty, cost is 0 and we should fill it.
 			if(SS[i]->group.empty()){
 				SS[i]->group.insert(SS[i]->group.end(), v.first.begin(), v.first.end());
+				SS[i]->children.push_back(newNode(v.first));
 				ss_to_join = -2;
 				break;
 			}
@@ -119,27 +123,33 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 			if(ss_to_join == -2){ }
 			else{
 
+				std::cout<<"SS["<<ss_to_join<<" Group size = "<<SS[ss_to_join]->group.size()<<"\n";
+
 				//Here, need to make sure were not inserting duplicate indicies
 				for(int i : v.first){
 					if(!std::count(SS[ss_to_join]->group.begin(), SS[ss_to_join]->group.end(), i)){
 						SS[ss_to_join]->group.push_back(i);
 					}
 				}
-				//SS[ss_to_join]->group.insert(SS[ss_to_join]->group.end(), v.first.begin(), v.first.end());
 
-				//If the newly inserted group gives the Subset 2 or more groups, make the individual ones child nodes of that SS.
+				SS[ss_to_join]->children.push_back(newNode(v.first));
+
+				/*If the newly inserted group gives the Subset 2 or more groups, make the individual ones child nodes of that SS.
 				if(SS[ss_to_join]->group.size() == 2){
 					SS[ss_to_join]->children.push_back(newNode({SS[ss_to_join]->group[0]}));
 					SS[ss_to_join]->children.push_back(newNode({SS[ss_to_join]->group[1]}));
+					std::cout<<"Adding initial two children to node"<<ss_to_join<<"\n";
 				}
 				else if(SS[ss_to_join]->group.size() > 2){
 					SS[ss_to_join]->children.push_back(newNode(v.first));
-				}
+					std::cout<<"Adding additional child to node"<<ss_to_join<<", Group size = "<<SS[ss_to_join]->group.size()<<"\n";
+				}*/
 			}
 		}
 		else{
 			SS.push_back(newNode({}));
 			SS.back()->group.insert(SS.back()->group.end(), v.first.begin(), v.first.end());
+			SS[SS.size()-1]->children.push_back(newNode(v.first));
 		}
 
 		//Reset variables
@@ -151,10 +161,15 @@ std::vector<Node *> DivideSubsets(Node * u, int k, std::string filename){
 	//Now that all the subsets have been divided, remake the children of node u to be those in the subset. (Should we do this?)
 	std::cout<<"DIV SUBSETS: FOR K = "<<k<<" (Subset size is "<<SS.size()<<")"<<std::endl;
 	for(Node * ss : SS){
+		//IF DELETING THE OUTPUT KEEP THIS!!
+		if(ss->children.size() == 1){
+			ss->children.clear();
+		}
+
 		for(int ch : ss->group){
 			std::cout<<ch<<", ";			
 		}
-		std::cout<<"cardinality = "<<sortCost(ss->group, filename)<<std::endl;
+		std::cout<<"cardinality = "<<sortCost(ss->group, filename)<<", "<<ss->children.size()<<" Children."<<std::endl;
 
 	} 
     
