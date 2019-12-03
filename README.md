@@ -5,7 +5,7 @@ Implementation in C++ of the algorithms described in the 2016 ICDE paper "A Nove
 Worked on by Ethan Letourneau and Daniel Kane.
 
 
-To compile the naive solution, run this command: g++ -std=c++11 naive.cpp
+To compile the naive solution, run this command: "g++ -std=c++11 naive.cpp"
 To run the naive solution, edit first the files "elements" 2D string vector to include the groupings you desire to be computed - the groupings used in our experiments are detailed in groups.txt. They are in order 1-28 in the 2D vector in the main function. Then recompile and run "a.out" or "a.exe" depending on your machine.
 
 To compile the optimal solution, run "make" executing the makefile.
