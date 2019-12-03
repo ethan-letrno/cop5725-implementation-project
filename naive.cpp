@@ -108,7 +108,7 @@ int NaiveExecution(std::vector<std::vector<std::string>> elements, std::string t
 		while(std::getline(file,current_line)){
 			test_counter++;
 
-			if(test_counter%1000 == 0)
+			if(test_counter%100000 == 0)
 				std::cout<<"Still working.... ("<<test_counter<<")\n";
 
 			//Split the current line on '|'
