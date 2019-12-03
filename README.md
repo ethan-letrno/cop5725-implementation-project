@@ -1,4 +1,4 @@
-# cop5725-implementation-project
+# COP5725 FALL 2019 PROJECT 
 
 Implementation in C++ of the algorithms described in the 2016 ICDE paper "A Novel, Low-latency Algorithm for Multiple Group-By Query Optimization".
 
