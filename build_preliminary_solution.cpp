@@ -87,7 +87,7 @@ Node * build_preliminary_solution(std::vector< std::vector< std::string > > term
     
     fix_scan(root);
     std::cout << "The tree is currently as follows: " << std::endl;
-    preord(root);
+    //preord(root);
 
     return root;
 }
