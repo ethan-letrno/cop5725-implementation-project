@@ -4,6 +4,8 @@ Implementation in C++ of the algorithms described in the 2016 ICDE paper "A Nove
 
 Worked on by Ethan Letourneau and Daniel Kane.
 
+Compiled using MinGW g++ Version 8.2.0-5.
+
 "Installing" the programs is a matter of just downloading the repository and extracting the files to a common folder, along with the file "2000000.table" given to the instructor via email or USB.
 
 To compile the naive solution, run this command: "g++ -std=c++11 naive.cpp"
