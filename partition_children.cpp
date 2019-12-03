@@ -63,7 +63,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         //and compute the  new cost
         double C_prime = get_cost(new_g_prime, filename);
         
-        std::cout <<"New cost would be: "<< C_prime << ", Old cost was "<<C_min<< std::endl; 
+        //std::cout <<"New cost would be: "<< C_prime << ", Old cost was "<<C_min<< std::endl; 
         
         
         //Then, if the cost of the added nodes is better, we remember them. 
@@ -82,7 +82,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
         int is_same = 1;
 
         if(SS.size() == u->children.size()){
-            for(int x = 0; x < SS.size(); x++){
+            /*for(int x = 0; x < SS.size(); x++){
                 if(SS[x]->group != u->children[x]->group){
                     std::cout<<"Not same.\n";
                     is_same = 0;
@@ -90,7 +90,7 @@ int partition_children(Node * u, int k, std::string filename, Node * g_prime) {
                 }
             }
 
-            if(is_same == 1)
+            if(is_same == 1)*/
                 return 0;
         }
 
@@ -218,4 +218,3 @@ double get_cost(Node * root, std::string file) {
     
     return total_cost;
 }
-
