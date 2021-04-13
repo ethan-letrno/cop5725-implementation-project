@@ -1,4 +1,4 @@
-# COP5725 FALL 2019 PROJECT 
+# Multiple Group-By Query Optimization Implementation
 
 Implementation in C++ of the algorithms described in the 2016 ICDE paper "A Novel, Low-latency Algorithm for Multiple Group-By Query Optimization".
 
@@ -6,7 +6,7 @@ Worked on by Ethan Letourneau and Daniel Kane.
 
 Compiled using MinGW g++ Version 8.2.0-5.
 
-"Installing" the programs is a matter of just downloading the repository and extracting the files to a common folder, along with the file "2000000.table" given to the instructor via email or USB.
+"Installing" the programs is a matter of just downloading the repository and extracting the files to a common folder, along with the file "2000000.table" given at request via email (eml14g@my.fsu.edu). An example of a table file is given, 184000.table, which could be used instead with modification of code.
 
 To compile the naive solution, run this command: "g++ -std=c++11 naive.cpp"
 To run the naive solution, edit first the files "elements" 2D string vector to include the groupings you desire to be computed - the groupings used in our experiments are detailed in groups.txt. They are in order 1-28 in the 2D vector in the main function. Then recompile and run "a.out" or "a.exe" depending on your machine.
